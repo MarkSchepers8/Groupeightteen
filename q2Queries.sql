@@ -1,0 +1,46 @@
+-- QUERY 1
+SELECT CourseName, Grade FROM Students 
+LEFT JOIN StudentRegistrationsToDegrees ON Students.StudentId = StudentRegistrationsToDegrees.StudentId 
+AND StudentRegistrationsToDegrees.DegreeId = %2% AND Students.StudentId = %1% 
+LEFT JOIN Courses ON Courses.DegreeId = StudentRegistrationsToDegrees.DegreeId 
+LEFT JOIN CourseOffers ON CourseOffers.CourseOfferId = Courses.CourseOfferId 
+LEFT JOIN CourseRegistrations ON CourseRegistrations.CourseOfferId = CourseOffers.CourseOfferId 
+WHERE Grade > 5 ORDER BY Year THEN BY Quartile THEN BY CourseOfferId;
+
+
+-- QUERY 2
+SELECT UNIQUE StudentId FROM DegreeCompleted
+LEFT JOIN CourseRegistrations ON CourseRegistrations.StudentRegistrationId = DegreeCompleted.StudentRegistrationId
+LEFT JOIN GPA ON GPA.StudentRegistrationId = DegreeCompleted.StudentRegistrationId
+HAVING GPA.GPA > %1%
+AND CourseRegistrations.Grade >= 5
+
+-- QUERY 3
+
+-- QUERY 4
+
+-- QUERY 5
+
+-- QUERY 6
+SELECT DISTINCT StudentId, count(StudentId)
+FROM HighestGradeCourseOffers
+WHERE Year = 2018 AND Quartile = 1
+GROUP BY StudentId
+HAVING count(studentid) >= %1%;
+
+-- QUERY 7
+SELECT degreeid, birthyearstudent, gender, avg(gpa)
+FROM Students
+LEFT JOIN ActiveStudentsPerDegree ON ActiveStudentsPerDegree.StudentId = Students.StudentId
+LEFT JOIN GPA ON GPA.StudentRegistrationId = ActiveStudentsPerDegree.StudentRegistrationId
+GROUP BY cube(degreeid, birthyearstudent, gender);
+
+-- QUERY 8
+SELECT CourseName, Year, Quartile
+FROM CourseOffers 
+LEFT JOIN StudentAssistants ON StudentAssistants.CourseOfferId = CourseOffers.CourseOfferId
+LEFT JOIN CourseRegistrations ON CourseRegistrations.CourseId = CourseOffers.CourseId
+LEFT JOIN Courses ON CourseOffers.CourseOfferId = Courses.CourseId
+GROUP BY CourseOfferId
+HAVING COUNT(CourseRegistrations.StudentRegistrationId)/COUNT(StudentAssistants.StudentRegistrationId)>50
+ORDER BY CourseOfferId;
