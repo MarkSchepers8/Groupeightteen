@@ -1,7 +1,7 @@
 CREATE MATERIALIZED VIEW GPA as (
     SELECT StudentRegistrationsToDegrees.StudentRegistrationId, CAST(sum(grade*ects) as float)/CAST(sum(ects) as float) as gpa
     FROM CourseRegistrations
-    LEFT JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = CourseRegistrations.StudentRegistrationId AND CourseRegistrations.Grade >= 5 
+    LEFT JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = CourseRegistrations.StudentRegistrationId AND CourseRegistrations.Grade >= 5
     LEFT JOIN CourseOffers ON CourseRegistrations.CourseOfferId = CourseOffers.CourseOfferId
     LEFT JOIN Courses on Courses.CourseId = CourseOffers.CourseId
     GROUP BY StudentRegistrationsToDegrees.StudentRegistrationId
@@ -44,14 +44,14 @@ CREATE MATERIALIZED VIEW DegreeCompleted as (
     HAVING Degrees.TotalECTS <= StudentsECTS.TotalECTS
 );
 
-CREATE MATERIALIZED VIEW NumAssistantsCourseOffer as(
+CREATE VIEW NumAssistantsCourseOffer as(
    SELECT CourseOfferId, Count(StudentRegistrationId) as NumAssistants
    FROM StudentAssistants
    GROUP BY CourseOfferId
    HAVING Count(StudentRegistrationId)>0
 );
 
-CREATE MATERIALIZED VIEW NumStudentsCourseOffer as(
+CREATE VIEW NumStudentsCourseOffer as(
    SELECT CourseOfferId, Count(StudentRegistrationId) as NumStudents
    FROM CourseRegistrations
    GROUP BY CourseOfferId
