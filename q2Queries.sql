@@ -11,7 +11,7 @@ WHERE Grade > 5 ORDER BY Year THEN BY Quartile THEN BY CourseOfferId;
 -- QUERY 2
 SELECT DISTINCT StudentId FROM DegreeCompleted
 LEFT JOIN CourseRegistrations ON CourseRegistrations.StudentRegistrationId = DegreeCompleted.StudentRegistrationId
-LEFT JOIN GPA ON GPA.StudentRegistrationId = DegreeCompleted.StudentRegistrationId HAVING GPA.GPA > %1% AND ALL CourseRegistration.Grade >= 5 
+LEFT JOIN GPA ON GPA.StudentRegistrationId = DegreeCompleted.StudentRegistrationId HAVING GPA.GPA > %1% AND min(CourseRegistration.Grade >= 5) 
 GROUP BY StudentId;
 
 
