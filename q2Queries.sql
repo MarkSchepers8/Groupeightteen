@@ -19,8 +19,16 @@ GROUP BY StudentId;
 -- QUERY 3
 
 -- QUERY 4
+SELECT (SELECT COUNT(CASE WHEN a1.gender = ‘F’ then 1 end) FROM Students a1)/ (SELECT COUNT(*) FROM StudentRegistrationToDegrees a3) as percentage_f
+FROM Students a1
+INNER JOIN  a3 ON a1.StudentId = a3.StudentId
+INNER JOIN Degrees a2 ON a1.DegreeId = a2.DegreeId
+WHERE a2.Dept = %1%
+GROUPBY a3.DegreeID;
 
 -- QUERY 5
+SELECT CourseId, (SELECT COUNT(CASE WHEN a1.grade >= %1% then 1 	end) / (SELECT COUNT(StudentRegistrationid) FROM courseRegistrations ) FROM StudentRegistrationToDegrees a1 WHERE a1.grade IS NOT NULL) AS percentagePassing FROM Courses
+INNER JOIN courseRegistrations a1 ON a1.courseId = Courses.CourseId;
 
 -- QUERY 6
 SELECT DISTINCT StudentId, count(StudentId) FROM HighestGradeCourseOffers WHERE Year = 2018 AND Quartile = 1 GROUP BY StudentId HAVING count(studentid) >= %1%;
