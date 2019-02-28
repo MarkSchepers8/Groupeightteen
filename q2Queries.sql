@@ -9,11 +9,12 @@ WHERE Grade > 5 ORDER BY Year THEN BY Quartile THEN BY CourseOfferId;
 
 
 -- QUERY 2
-SELECT UNIQUE StudentId FROM DegreeCompleted
+SELECT DISTINCT StudentId FROM DegreeCompleted
 LEFT JOIN CourseRegistrations ON CourseRegistrations.StudentRegistrationId = DegreeCompleted.StudentRegistrationId
-LEFT JOIN GPA ON GPA.StudentRegistrationId = DegreeCompleted.StudentRegistrationId
-HAVING GPA.GPA > %1%
-AND CourseRegistrations.Grade >= 5
+LEFT JOIN GPA ON GPA.StudentRegistrationId = DegreeCompleted.StudentRegistrationId AND GPA.GPA > 8
+GROUP BY StudentId
+
+
 
 -- QUERY 3
 
