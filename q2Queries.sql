@@ -17,7 +17,11 @@ GROUP BY StudentId;
 
 
 -- QUERY 3
-
+SELECT a3.DegreeId, COUNT(CASE WHEN a1.gender = ‘F’) / (SELECT COUNT(a2.Gender) FROM Students) as percentage_female
+FROM  StudentRegistrationToDegrees a3, Students
+INNER JOIN ActiveStudentsPerDegree a4 ON a4.StudentId = a1.StudentId AND a4.StudentId = a2.StudentId
+WHERE StudentRegistrationToDegree a3 ON a1.StudentId = a3.StudentId AND a2.StudentId = a3.StudentId
+GROUPBY DegreeID;
 -- QUERY 4
 SELECT (SELECT COUNT(CASE WHEN a1.gender = ‘F’ then 1 end) FROM Students a1)/ (SELECT COUNT(*) FROM StudentRegistrationToDegrees a3) as percentage_f
 FROM Students a1
