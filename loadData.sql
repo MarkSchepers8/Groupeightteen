@@ -24,4 +24,4 @@ FROM '/mnt/ramdisk/tables/StudentAssistants.table'
 DELIMITER ',' CSV HEADER;
 COPY courseregistrations(courseofferid, studentregistrationid, grade)
 FROM '/mnt/ramdisk/tables/CourseRegistrations.table'
-DELIMITER ',' CSV HEADER NULL AS 'null';" 
+DELIMITER ',' CSV HEADER NULL AS 'null';
