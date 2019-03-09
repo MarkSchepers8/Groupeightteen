@@ -18,8 +18,8 @@ CREATE UNLOGGED TABLE students
 CREATE UNLOGGED TABLE studentregistrationstodegrees
 (
   studentregistrationid INT NOT NULL,
-  studentid INT,
-  degreeid INT,
+  studentid INT references students(studentid),
+  degreeid INT references degrees(degreeid),
   registrationyear INT,
   CONSTRAINT studentregistrationstodegrees_pkey PRIMARY KEY (studentregistrationid)
 );
@@ -37,7 +37,7 @@ CREATE UNLOGGED TABLE courses
   courseid INT,
   coursename VARCHAR(50),
   coursedescription VARCHAR(200),
-  degreeid INT,
+  degreeid INT references degrees(degreeid),
   ects INT,
   CONSTRAINT courses_pkey PRIMARY KEY (courseid)
 );
