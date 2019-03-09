@@ -7,14 +7,21 @@ CREATE MATERIALIZED VIEW GPA as (
     GROUP BY StudentRegistrationsToDegrees.StudentRegistrationId
 );
 
+CREATE MATERIALIZED VIEW CourseRegistrations2018_q1 as (
+    SELECT CourseOffers.CourseOfferId, studentregistrationid, grade
+    FROM CourseOffers
+    LEFT JOIN CourseRegistrations ON CourseRegistrations.CourseOfferId = CourseOffers.CourseOfferId
+    WHERE Year = 2018 AND Quartile = 1
+);
+
 CREATE MATERIALIZED VIEW HighestGradeCourseOffers as (
-    SELECT StudentId, grade, year, quartile
+    SELECT StudentId
     FROM (
         SELECT CourseOfferId, MAX(grade) as HighestGrade
-        FROM CourseRegistrations
+        FROM CourseRegistrations2018_q1
         GROUP By CourseOfferId
     ) AS maxCr
-    INNER JOIN CourseRegistrations AS cr ON maxCr.CourseOfferId = cr.CourseOfferId AND maxCr.highestgrade = cr.grade
+    INNER JOIN CourseRegistrations2018_q1 AS cr ON maxCr.CourseOfferId = cr.CourseOfferId AND maxCr.highestgrade = cr.grade
     LEFT JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = cr.StudentRegistrationId 
     LEFT JOIN CourseOffers ON CourseOffers.CourseOfferId = cr.CourseOfferId
 );
@@ -42,18 +49,5 @@ CREATE MATERIALIZED VIEW DegreeCompleted as (
     LEFT JOIN Degrees ON Degrees.DegreeId = StudentsECTS.DegreeId
     GROUP BY StudentRegistrationId, StudentId, Degrees.DegreeId, Degrees.TotalECTS, StudentsECTS.TotalECTS
     HAVING Degrees.TotalECTS <= StudentsECTS.TotalECTS
-);
-
-CREATE VIEW NumAssistantsCourseOffer as(
-   SELECT CourseOfferId, Count(StudentRegistrationId) as NumAssistants
-   FROM StudentAssistants
-   GROUP BY CourseOfferId
-   HAVING Count(StudentRegistrationId)>0
-);
-
-CREATE VIEW NumStudentsCourseOffer as(
-   SELECT CourseOfferId, Count(StudentRegistrationId) as NumStudents
-   FROM CourseRegistrations
-   GROUP BY CourseOfferId
 );
 
