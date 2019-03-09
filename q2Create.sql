@@ -23,7 +23,6 @@ CREATE MATERIALIZED VIEW HighestGradeCourseOffers as (
     ) AS maxCr
     INNER JOIN CourseRegistrations2018_q1 AS cr ON maxCr.CourseOfferId = cr.CourseOfferId AND maxCr.highestgrade = cr.grade
     LEFT JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = cr.StudentRegistrationId 
-    LEFT JOIN CourseOffers ON CourseOffers.CourseOfferId = cr.CourseOfferId
 );
 
 CREATE MATERIALIZED VIEW StudentsECTS as (
