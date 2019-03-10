@@ -15,14 +15,14 @@ CREATE MATERIALIZED VIEW CourseRegistrations2018_q1 as (
 );
 
 CREATE MATERIALIZED VIEW HighestGradeCourseOffers as (
-    SELECT StudentId
+    SELECT StudentId, CourseOfferId
     FROM (
         SELECT CourseOfferId, MAX(grade) as HighestGrade
         FROM CourseRegistrations2018_q1
         GROUP By CourseOfferId
     ) AS maxCr
     INNER JOIN CourseRegistrations2018_q1 AS cr ON maxCr.CourseOfferId = cr.CourseOfferId AND maxCr.highestgrade = cr.grade
-    LEFT JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = cr.StudentRegistrationId 
+    INNER JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = cr.StudentRegistrationId 
 );
 
 CREATE MATERIALIZED VIEW StudentsECTS as (
