@@ -10,7 +10,7 @@ CREATE MATERIALIZED VIEW GPA as (
 CREATE MATERIALIZED VIEW CourseRegistrations2018_q1 as (
     SELECT CourseOffers.CourseOfferId, studentregistrationid, grade
     FROM CourseOffers
-    LEFT JOIN CourseRegistrations ON CourseRegistrations.CourseOfferId = CourseOffers.CourseOfferId
+    INNER JOIN CourseRegistrations ON CourseRegistrations.CourseOfferId = CourseOffers.CourseOfferId
     WHERE Year = 2018 AND Quartile = 1
 );
 
