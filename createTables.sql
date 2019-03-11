@@ -46,7 +46,8 @@ CREATE UNLOGGED TABLE courseoffers
   courseofferid INT,
   courseid INT,
   year INT,
-  quartile INT
+  quartile INT,
+  CONSTRAINT courseoffers_pkey PRIMARY KEY (courseofferid)
 );
 CREATE UNLOGGED TABLE teacherassignmentstocourses
 (
