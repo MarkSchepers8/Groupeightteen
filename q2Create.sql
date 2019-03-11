@@ -8,7 +8,7 @@ CREATE MATERIALIZED VIEW GPA as (
 );
 
 CREATE MATERIALIZED VIEW StudentsFailedCourse as (
-SELECT StudentRegistrationId FROM CourseRegistrations WHERE grade < 5 group by studentregistrationid;
+  SELECT StudentRegistrationId FROM CourseRegistrations WHERE grade < 5 group by studentregistrationid
 );
 
 
@@ -27,7 +27,7 @@ CREATE MATERIALIZED VIEW HighestGradeCourseOffers as (
         GROUP By CourseOfferId
     ) AS maxCr
     INNER JOIN CourseRegistrations2018_q1 AS cr ON maxCr.CourseOfferId = cr.CourseOfferId AND maxCr.highestgrade = cr.grade
-    INNER JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = cr.StudentRegistrationId 
+    INNER JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = maxCr.StudentRegistrationId 
 );
 
 CREATE MATERIALIZED VIEW StudentsECTS as (
