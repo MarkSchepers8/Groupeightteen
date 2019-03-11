@@ -15,7 +15,7 @@ CREATE MATERIALIZED VIEW CourseRegistrations2018_q1 as (
 );
 
 CREATE MATERIALIZED VIEW HighestGradeCourseOffers as (
-    SELECT StudentId, cr.CourseOfferId
+    SELECT StudentId, cr.CourseOfferId, HighestGrade
     FROM (
         SELECT CourseOfferId, MAX(grade) as HighestGrade
         FROM CourseRegistrations2018_q1
