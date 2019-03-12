@@ -7,14 +7,6 @@ CREATE MATERIALIZED VIEW GPA as (
     GROUP BY StudentRegistrationsToDegrees.StudentRegistrationId
 );
 
-CREATE MATERIALIZED VIEW StudentWorstGrade as (
-   SELECT DegreeCompleted.StudentRegistrationId, DegreeId, MIN(grade) as lowestGrade
-   FROM DegreeCompleted
-   INNER JOIN CourseRegistrations ON DegreeCompleted.StudentRegistrationId = CourseRegistrations.StudentRegistrationId
-   GROUP BY DegreeCompleted.StudentRegistrationid, DegreeId
-);
-
-
 CREATE VIEW CourseRegistrations2018_q1 as (
     SELECT CourseOffers.CourseOfferId, studentregistrationid, grade
     FROM CourseRegistrations
@@ -37,7 +29,7 @@ CREATE MATERIALIZED VIEW HighestGradeStudents as (
 );
 
 CREATE MATERIALIZED VIEW StudentsECTS as (
-    SELECT DISTINCT StudentId, StudentRegistrationsToDegrees.StudentRegistrationId, StudentRegistrationsToDegrees.DegreeId, SUM(ects) as totalects
+    SELECT StudentId, StudentRegistrationsToDegrees.StudentRegistrationId, StudentRegistrationsToDegrees.DegreeId, SUM(ects) as totalects
     FROM StudentRegistrationsToDegrees
     LEFT JOIN CourseRegistrations ON StudentRegistrationsToDegrees.StudentRegistrationId = CourseRegistrations.StudentRegistrationId AND grade >=5 
     LEFT JOIN CourseOffers ON CourseOffers.CourseOfferId = CourseRegistrations.CourseOfferId
@@ -60,4 +52,12 @@ CREATE MATERIALIZED VIEW DegreeCompleted as (
     WHERE Degrees.TotalECTS <= StudentsECTS.TotalECTS
     GROUP BY StudentRegistrationId, StudentId, Degrees.DegreeId, Degrees.TotalECTS, StudentsECTS.TotalECTS
 );
+
+CREATE MATERIALIZED VIEW StudentWorstGrade as (
+   SELECT DegreeCompleted.StudentRegistrationId, DegreeId, MIN(grade) as lowestGrade
+   FROM DegreeCompleted
+   INNER JOIN CourseRegistrations ON DegreeCompleted.StudentRegistrationId = CourseRegistrations.StudentRegistrationId
+   GROUP BY DegreeCompleted.StudentRegistrationid, DegreeId
+);
+
 
