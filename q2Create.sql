@@ -31,9 +31,9 @@ CREATE MATERIALIZED VIEW HighestGradeStudents as (
 CREATE MATERIALIZED VIEW StudentsECTS as (
     SELECT DISTINCT StudentId, StudentRegistrationsToDegrees.StudentRegistrationId, StudentRegistrationsToDegrees.DegreeId, SUM(ects) as totalects
     FROM StudentRegistrationsToDegrees
-    INNER JOIN CourseRegistrations ON StudentRegistrationsToDegrees.StudentRegistrationId = CourseRegistrations.StudentRegistrationId AND grade >=5 
-    INNER JOIN CourseOffers ON CourseOffers.CourseOfferId = CourseRegistrations.CourseOfferId
-    INNER JOIN Courses ON Courses.CourseId = CourseOffers.CourseId
+    LEFT JOIN CourseRegistrations ON StudentRegistrationsToDegrees.StudentRegistrationId = CourseRegistrations.StudentRegistrationId AND grade >=5 
+    LEFT JOIN CourseOffers ON CourseOffers.CourseOfferId = CourseRegistrations.CourseOfferId
+    LEFT JOIN Courses ON Courses.CourseId = CourseOffers.CourseId
     GROUP BY StudentRegistrationsToDegrees.StudentRegistrationId
 );
 
@@ -41,8 +41,8 @@ CREATE MATERIALIZED VIEW ActiveStudentsPerDegree as (
     SELECT StudentId, StudentRegistrationId, Degrees.DegreeId
     FROM StudentsECTS
     INNER JOIN Degrees ON StudentsECTS.DegreeId = Degrees.DegreeId
+    WHERE StudentsECTS.totalects < degrees.totalects
     GROUP BY StudentRegistrationId, StudentId, Degrees.DegreeId, Degrees.TotalECTS, StudentsECTS.TotalECTS
-    HAVING StudentsECTS.totalects < degrees.totalects
 );
 
 CREATE MATERIALIZED VIEW DegreeCompleted as (
