@@ -7,10 +7,6 @@ CREATE MATERIALIZED VIEW GPA as (
     GROUP BY StudentRegistrationsToDegrees.StudentRegistrationId
 );
 
-CREATE MATERIALIZED VIEW StudentsFailedCourse as (
-  SELECT StudentRegistrationId FROM CourseRegistrations WHERE grade < 5 group by studentregistrationid
-);
-
 CREATE MATERIALIZED VIEW CourseRegistrations2018_q1 as (
     SELECT CourseOffers.CourseOfferId, studentregistrationid, grade
     FROM CourseOffers
