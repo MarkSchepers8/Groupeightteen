@@ -38,10 +38,10 @@ CREATE MATERIALIZED VIEW StudentsECTS as (
 );
 
 CREATE MATERIALIZED VIEW ActiveStudentsPerDegree as (
-    SELECT StudentId, StudentRegistrationId, Degrees.DegreeId
+    SELECT StudentId, StudentRegistrationId, Degrees.DegreeId, studentsects.totalects
     FROM StudentsECTS
     INNER JOIN Degrees ON StudentsECTS.DegreeId = Degrees.DegreeId
-    WHERE StudentsECTS.totalects < degrees.totalects
+    WHERE StudentsECTS.totalects IS NULL OR StudentsECTS.totalects < degrees.totalects
     GROUP BY StudentRegistrationId, StudentId, Degrees.DegreeId, Degrees.TotalECTS, StudentsECTS.TotalECTS
 );
 
