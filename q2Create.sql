@@ -7,20 +7,23 @@ CREATE MATERIALIZED VIEW GPA as (
     GROUP BY StudentRegistrationsToDegrees.StudentRegistrationId
 );
 
-CREATE MATERIALIZED VIEW CourseRegistrations2018_q1 as (
+CREATE VIEW CourseRegistrations2018_q1 as (
     SELECT CourseOffers.CourseOfferId, studentregistrationid, grade
-    FROM CourseOffers
-    INNER JOIN CourseRegistrations ON CourseRegistrations.CourseOfferId = CourseOffers.CourseOfferId
+    FROM CourseRegistrations
+    INNER JOIN CourseOffers ON CourseRegistrations.CourseOfferId = CourseOffers.CourseOfferId
     WHERE Year = 2018 AND Quartile = 1
 );
 
-CREATE MATERIALIZED VIEW HighestGradeCourseOffers as (
-    SELECT StudentId, cr.CourseOfferId, HighestGrade
-    FROM (
+CREATE VIEW HighestGradePerCourseOffer as (
         SELECT CourseOfferId, MAX(grade) as HighestGrade
         FROM CourseRegistrations2018_q1
+     WHERE grade>= 0
         GROUP By CourseOfferId
-    ) AS maxCr
+);
+
+CREATE MATERIALIZED VIEW HighestGradeStudents as (
+    SELECT StudentId, cr.CourseOfferId, HighestGrade
+    FROM HighestGradePerCourseOffer as maxCr
     INNER JOIN CourseRegistrations2018_q1 AS cr ON maxCr.CourseOfferId = cr.CourseOfferId AND maxCr.highestgrade = cr.grade
     INNER JOIN StudentRegistrationsToDegrees ON StudentRegistrationsToDegrees.StudentRegistrationId = cr.StudentRegistrationId 
 );
