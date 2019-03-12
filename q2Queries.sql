@@ -1,7 +1,7 @@
 SELECT CourseName, Grade FROM StudentRegistrationsToDegrees as srtd INNER JOIN CourseRegistrations ON srtd.StudentRegistrationId = CourseRegistrations.StudentRegistrationId INNER JOIN CourseOffers ON CourseRegistrations.CourseOfferId = CourseOffers.CourseOfferId INNER JOIN Courses ON CourseOffers.CourseId = Courses.CourseId WHERE srtd.StudentId = %1% AND srtd.DegreeId = %2% AND Grade >= 5 ORDER BY Year, Quartile, CourseOffers.CourseOfferId;
 SELECT 0;
-SELECT A.DegreeId, count(CASE WHEN A2.Gender = 'F' THEN 1 END)/count(A.StudentId)::float as femalePercentage FROM ActiveStudentsPerDegree A INNER JOIN Students A2 ON A2.StudentId = A.StudentId GROUP BY A.DegreeId;
-SELECT 0;
+SELECT A.DegreeId, COUNT(CASE WHEN A2.Gender = 'F' THEN 1 END)/count(A.StudentId)::float AS percentage FROM ActiveStudentsPerDegree A INNER JOIN Students A2 ON A2.StudentId = A.StudentId GROUP BY A.DegreeId;
+SELECT COUNT(CASE WHEN A2.Gender = 'F' THEN 1 END) / COUNT(A.StudentId)::float AS percentage FROM StudentRegistrationsToDegrees A INNER JOIN Students A2 ON A2.StudentId = A.StudentId INNER JOIN Degrees A3 ON A3.DegreeId = A.DegreeId WHERE A3.Dept =%1% GROUP BY A.DegreeId;
 SELECT 0;
 SELECT StudentId, count(StudentId) as numberOfCoursesWhereExcellent FROM HighestGradeCourseOffers GROUP BY StudentId HAVING count(studentid) >= %1%;
 SELECT degreeid, birthyearstudent as birthyear, gender, avg(gpa) as avgGrade FROM Students INNER JOIN ActiveStudentsPerDegree ON ActiveStudentsPerDegree.StudentId = Students.StudentId INNER JOIN GPA ON GPA.StudentRegistrationId = ActiveStudentsPerDegree.StudentRegistrationId GROUP BY cube(degreeid, birthyearstudent, gender);
